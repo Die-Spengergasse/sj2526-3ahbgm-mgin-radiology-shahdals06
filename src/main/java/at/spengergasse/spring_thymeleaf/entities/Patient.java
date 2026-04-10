@@ -1,34 +1,30 @@
 package at.spengergasse.spring_thymeleaf.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 public class Patient {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String name;
-    private LocalDate birth;
+    private String svnr;
+    private String vorname;
+    private String nachname;
+    private String geschlecht;
+    private LocalDate geburtsdatum;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getBirth() {
-        return birth;
-    }
-
-    public void setBirth(LocalDate birth) {
-        this.birth = birth;
-    }
+    public int getId() { return id; }
+    public String getSvnr() { return svnr; }
+    public void setSvnr(String svnr) { this.svnr = svnr; }
+    public String getVorname() { return vorname; }
+    public void setVorname(String vorname) { this.vorname = vorname; }
+    public String getNachname() { return nachname; }
+    public void setNachname(String nachname) { this.nachname = nachname; }
+    public String getGeschlecht() { return geschlecht; }
+    public void setGeschlecht(String geschlecht) { this.geschlecht = geschlecht; }
+    public LocalDate getGeburtsdatum() { return geburtsdatum; }
+    public void setGeburtsdatum(LocalDate geburtsdatum) { this.geburtsdatum = geburtsdatum; }
 }

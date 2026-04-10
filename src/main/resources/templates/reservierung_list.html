@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reservierungen pro Gerät</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+<h2>Reservierungsliste für ein Gerät</h2>
+
+<form th:action="@{/reservierung/list}" method="get" class="row g-3 mb-4">
+    <div class="col-auto">
+        <label class="form-label">Gerät auswählen:</label>
+        <select name="geraetId" class="form-select">
+            <option value="">-- Bitte wählen --</option>
+            <option th:each="g : ${geraete}"
+                    th:value="${g.id}"
+                    th:text="${g.bezeichnung + ' (' + g.art + ') - ' + g.standort}"
+                    th:selected="${g.id == selectedGeraetId}">
+            </option>
+        </select>
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Anzeigen</button>
+    </div>
+</form>
+
+<hr>
+
+<table class="table table-striped" th:if="${not #lists.isEmpty(reservierungen)}">
+    <thead>
+    <tr>
+        <th>Patient</th>
+        <th>Gerät</th>
+        <th>Raum</th>
+        <th>Termin</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${reservierungen}">
+        <td th:text="${r.patient.vorname + ' ' + r.patient.nachname}"></td>
+        <td th:text="${r.geraet.bezeichnung}"></td>
+        <td th:text="${r.geraet.standort}"></td>
+        <td th:text="${#temporals.format(r.reservierungszeit, 'dd.MM.yyyy HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${#lists.isEmpty(reservierungen)}" class="alert alert-info">
+    Bitte wählen Sie ein Gerät aus, um die Reservierungen zu sehen.
+</div>
+
+<br>
+<a href="/reservierung/add" class="btn btn-secondary">Neue Reservierung</a>
+
+</body>
+</html>

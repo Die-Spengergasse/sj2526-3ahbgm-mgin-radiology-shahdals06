@@ -2,30 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Patients List</title>
+    <title>Patientenliste</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>name</th>
-                <th>birth</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="p : ${patients}">
-                <td th:text="${p.name}"></td>
-                <td th:text="${p.birth}"></td>
-            </tr>
-        </tbody>
+    <<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>SVNR</th>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Geburtsdatum</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${patients}">
+        <td th:text="${p.svnr}"></td>
+        <td th:text="${p.vorname}"></td>
+        <td th:text="${p.nachname}"></td>
+        <td th:text="${p.geburtsdatum}"></td>
+    </tr>
+    </tbody>
+</table>
 
-    </table>
-
-    <p>
-        <a href="/patient/add">new patient</a>
-    </p>
+    <a href="/patient/add">Neuer Patient</a>
 </div>
 </body>
 </html>
