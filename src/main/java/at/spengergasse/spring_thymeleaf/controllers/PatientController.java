@@ -20,6 +20,7 @@ public class PatientController {
     public String list(Model model) {
         model.addAttribute("patients", patientRepository.findAll());
         return "patlist";
+
     }
 
     @GetMapping("/add")

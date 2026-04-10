@@ -8,9 +8,9 @@ public class Geraet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String bezeichnung; // z.B. "MRT 01"
-    private String art;         // z.B. "MR", "CT", "Röntgen"
-    private String standort;    // z.B. "Raum 101"
+    private String bezeichnung;
+    private String art;
+    private String standort;    a
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 

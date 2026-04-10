@@ -40,4 +40,5 @@ public class Reservierung {
 
     public String getKommentar() { return kommentar; }
     public void setKommentar(String kommentar) { this.kommentar = kommentar; }
+
 }

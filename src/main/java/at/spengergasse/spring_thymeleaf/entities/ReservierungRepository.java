@@ -6,4 +6,5 @@ import java.util.List;
 public interface ReservierungRepository extends CrudRepository<Reservierung, Integer> {
     // Sucht alle Reservierungen für ein bestimmtes Gerät anhand dessen ID
     List<Reservierung> findByGeraet_Id(Integer geraetId);
+
 }

@@ -36,6 +36,7 @@ public class SpringThymeleafApplication {
                 // Gerät 6: PET-CT
                 saveGeraet(geraetRepository, "PET-CT Hybrid", "Nuklearmedizin", "Raum 005 (Keller)");
             }
+
         };
     }
 

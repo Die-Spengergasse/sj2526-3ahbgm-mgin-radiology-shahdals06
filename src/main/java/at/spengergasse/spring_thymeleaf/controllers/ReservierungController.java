@@ -33,6 +33,7 @@ public class ReservierungController {
     public String addSave(@ModelAttribute Reservierung reservierung) {
         reservierungRepository.save(reservierung);
         return "redirect:/reservierung/list";
+
     }
 
     @GetMapping("/list")
