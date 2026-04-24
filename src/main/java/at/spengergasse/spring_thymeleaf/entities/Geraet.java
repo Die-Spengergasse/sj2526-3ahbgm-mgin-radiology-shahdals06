@@ -10,7 +10,7 @@ public class Geraet {
 
     private String bezeichnung;
     private String art;
-    private String standort;    a
+    private String standort;
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 

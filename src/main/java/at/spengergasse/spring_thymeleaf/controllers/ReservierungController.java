@@ -25,28 +25,86 @@ public class ReservierungController {
     public String addForm(Model model) {
         model.addAttribute("reservierung", new Reservierung());
         model.addAttribute("patients", patientRepository.findAll());
-        model.addAttribute("geraete", geraetRepository.findAll()); // Hier werden die Geräte geladen
+        model.addAttribute("geraete", geraetRepository.findAll());
         return "add_reservierung";
     }
 
-    @PostMapping("/add")
-    public String addSave(@ModelAttribute Reservierung reservierung) {
-        reservierungRepository.save(reservierung);
-        return "redirect:/reservierung/list";
-
-    }
 
     @GetMapping("/list")
-    public String list(@RequestParam(required = false) Integer geraetId, Model model) {
+    public String list(@RequestParam(required = false) Integer geraetId,
+                       Model model) {
+
         model.addAttribute("geraete", geraetRepository.findAll());
 
         if (geraetId != null) {
-            model.addAttribute("reservierungen", reservierungRepository.findByGeraet_Id(geraetId));
+            model.addAttribute("reservierungen",
+                    reservierungRepository.findByGeraet_Id(geraetId));
             model.addAttribute("selectedGeraetId", geraetId);
-        } else {
-
         }
 
         return "reservierung_list";
+    }
+    @PostMapping("/add")
+    public String addSave(@ModelAttribute Reservierung reservierung,
+                          org.springframework.validation.BindingResult result,
+                          Model model) {
+
+        if (result.hasErrors()) {
+
+            String fehler =
+                    result.getFieldError().getDefaultMessage();
+
+            if (fehler.contains("Reservierung")) {
+                fehler = "Reservierung darf nicht in der Vergangenheit liegen";
+            }
+
+            model.addAttribute("reservierung", reservierung);
+            model.addAttribute("patients", patientRepository.findAll());
+            model.addAttribute("geraete", geraetRepository.findAll());
+            model.addAttribute("error", fehler);
+
+            return "add_reservierung";
+        }
+
+        boolean geraetBelegt =
+                reservierungRepository.existsByGeraet_IdAndReservierungszeit(
+                        reservierung.getGeraet().getId(),
+                        reservierung.getReservierungszeit()
+                );
+
+        if (geraetBelegt) {
+            model.addAttribute("reservierung", reservierung);
+            model.addAttribute("patients", patientRepository.findAll());
+            model.addAttribute("geraete", geraetRepository.findAll());
+            model.addAttribute("error",
+                    "Dieses Gerät ist zu diesem Zeitpunkt bereits reserviert");
+            return "add_reservierung";
+        }
+
+        boolean patientBelegt =
+                reservierungRepository.existsByPatient_IdAndReservierungszeit(
+                        reservierung.getPatient().getId(),
+                        reservierung.getReservierungszeit()
+                );
+
+        if (patientBelegt) {
+            model.addAttribute("reservierung", reservierung);
+            model.addAttribute("patients", patientRepository.findAll());
+            model.addAttribute("geraete", geraetRepository.findAll());
+            model.addAttribute("error",
+                    "Dieser Patient hat zu diesem Zeitpunkt bereits einen Termin");
+            return "add_reservierung";
+        }
+
+        reservierungRepository.save(reservierung);
+        return "redirect:/reservierung/list";
+    }
+    @ExceptionHandler(Exception.class)
+    public String error(Exception e, Model model) {
+
+        model.addAttribute("error",
+                "Datenbankfehler: MySQL läuft nicht oder Verbindung fehlgeschlagen");
+
+        return "error";
     }
 }

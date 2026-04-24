@@ -20,7 +20,6 @@ public class PatientController {
     public String list(Model model) {
         model.addAttribute("patients", patientRepository.findAll());
         return "patlist";
-
     }
 
     @GetMapping("/add")
@@ -30,8 +29,38 @@ public class PatientController {
     }
 
     @PostMapping("/add")
-    public String save(@ModelAttribute Patient patient) {
+    public String save(@ModelAttribute Patient patient,
+                       org.springframework.validation.BindingResult result,
+                       Model model) {
+
+        if (result.hasErrors()) {
+
+            String fehler =
+                    result.getFieldError().getDefaultMessage();
+
+            if (fehler.contains("Geburtsdatum")) {
+                fehler = "Geburtsdatum darf nicht in der Zukunft liegen";
+            }
+
+            if (fehler.contains("Sozialversicherungsnummer")) {
+                fehler = "Ungültige Sozialversicherungsnummer";
+            }
+
+            model.addAttribute("patient", patient);
+            model.addAttribute("error", fehler);
+
+            return "add_patient";
+        }
+
         patientRepository.save(patient);
         return "redirect:/patient/list";
+    }
+    @ExceptionHandler(Exception.class)
+    public String error(Exception e, Model model) {
+
+        model.addAttribute("error",
+                "Datenbankfehler: MySQL läuft nicht oder Verbindung fehlgeschlagen");
+
+        return "error";
     }
 }
